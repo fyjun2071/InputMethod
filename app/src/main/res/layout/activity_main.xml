@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button_scan"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="欢迎使用简单输入法！" />
+        android:onClick="reScan"
+        android:text="扫描设备" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_devices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
