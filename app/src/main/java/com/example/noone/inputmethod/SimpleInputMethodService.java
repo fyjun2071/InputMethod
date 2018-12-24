@@ -20,6 +20,20 @@ public class SimpleInputMethodService extends InputMethodService implements View
         view.findViewById(R.id.button3).setOnClickListener(this);
         view.findViewById(R.id.button4).setOnClickListener(this);
         view.findViewById(R.id.button5).setOnClickListener(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    String msg = InputQueue.getInstance().pull();
+                    if ((msg == null) || (msg.length() == 0)) {
+                        continue;
+                    }
+
+                    InputConnection inputConnection = getCurrentInputConnection();
+                    inputConnection.commitText(msg, 1);
+                }
+            }
+        }).start();
         return view;
     }
 

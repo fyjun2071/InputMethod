@@ -39,7 +39,7 @@ public class BleDevAdapter extends RecyclerView.Adapter<BleDevAdapter.VH> {
 
     BleDevAdapter(Listener listener) {
         mListener = listener;
-        scanBle();
+//        scanBle();
     }
 
     // 重新扫描

@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -216,5 +217,10 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, String.format("写入Descriptor:%s,%s,%s,%s,%s", gatt.getDevice().getName(), gatt.getDevice().getAddress(), uuid, valueStr, status));
         }
     };
+
+    public void test(View view) {
+        Intent intent = new Intent(this, InputDemoActivity.class);
+        startActivity(intent);
+    }
 
 }
