@@ -36,7 +36,7 @@ public class SimpleInputMethodService extends InputMethodService {
                             continue;
                         }
 
-                        if ("delete".equals(msg)) {
+                        if ("backspace".equals(msg)) {
                             if (buf.length() > 0) {
                                 buf = new StringBuffer();
                                 Message message = clearBufferHandler.obtainMessage(1, "");

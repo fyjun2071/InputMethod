@@ -8,7 +8,9 @@
         android:id="@+id/text_buffer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="@color/text_Grey"
+        android:paddingVertical="16dp"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:background="@color/backgroud_text_Grey"
         android:text="" />
 </LinearLayout>

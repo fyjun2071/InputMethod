@@ -22,7 +22,7 @@ public class InputDemoActivity extends AppCompatActivity {
                 InputQueue.getInstance().put("1");
                 break;
             case R.id.button_d:
-                InputQueue.getInstance().put("delete");
+                InputQueue.getInstance().put("backspace");
                 break;
         }
     }
@@ -43,7 +43,7 @@ public class InputDemoActivity extends AppCompatActivity {
                 InputQueue.getInstance().put("11");
                 break;
             case R.id.button_center:
-                InputQueue.getInstance().put("delete");
+                InputQueue.getInstance().put("backspace");
                 break;
         }
     }

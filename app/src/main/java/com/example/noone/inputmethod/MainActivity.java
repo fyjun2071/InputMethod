@@ -80,6 +80,17 @@ public class MainActivity extends AppCompatActivity {
 
     // 扫描BLE
     public void reScan(View view) {
+
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (!bluetoothAdapter.isEnabled()) {
+            //弹出对话框提示用户是后打开
+            Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enabler, 1);
+            //不做提示，强行打开，此方法需要权限<uses-permissionandroid:name="android.permission.BLUETOOTH_ADMIN" />;
+            // bluetoothAdapter.enable();
+        }
+
         if (mBleDevAdapter.isScanning) {
             Toast.makeText(this,"正在扫描...", Toast.LENGTH_SHORT).show();
         } else {
@@ -200,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             UUID uuid = characteristic.getUuid();
             String valueStr = new String(characteristic.getValue());
+            InputQueue.getInstance().put(valueStr);
             Log.i(TAG, String.format("通知Characteristic:%s,%s,%s,%s", gatt.getDevice().getName(), gatt.getDevice().getAddress(), uuid, valueStr));
         }
 
