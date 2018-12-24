@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="click2"
-                android:text="up" />
+                android:text="00" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="click2"
-                android:text="left" />
+                android:text="01" />
 
             <Button
                 android:id="@+id/button_center"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="click2"
-                android:text="right" />
+                android:text="11" />
         </TableRow>
 
         <TableRow
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="click2"
-                android:text="down" />
+                android:text="10" />
 
             <TextView
                 android:id="@+id/textView5"

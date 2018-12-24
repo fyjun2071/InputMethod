@@ -1,11 +1,19 @@
 package com.example.noone.inputmethod;
 
 import android.inputmethodservice.InputMethodService;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class SimpleInputMethodService extends InputMethodService implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SimpleInputMethodService extends InputMethodService {
+
+    private TextView textBuf;
 
     public SimpleInputMethodService() {
     }
@@ -14,39 +22,67 @@ public class SimpleInputMethodService extends InputMethodService implements View
     @Override
     public View onCreateInputView() {
         View view = getLayoutInflater().inflate(R.layout.keyboard, null);
+        textBuf = view.findViewById(R.id.text_buffer);
 
-        view.findViewById(R.id.button).setOnClickListener(this);
-        view.findViewById(R.id.button2).setOnClickListener(this);
-        view.findViewById(R.id.button3).setOnClickListener(this);
-        view.findViewById(R.id.button4).setOnClickListener(this);
-        view.findViewById(R.id.button5).setOnClickListener(this);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    String msg = InputQueue.getInstance().pull();
-                    if ((msg == null) || (msg.length() == 0)) {
-                        continue;
+                    InputConnection inputConnection = getCurrentInputConnection();
+                    StringBuffer buf = new StringBuffer();
+                    while (buf.length() < 8) {
+                        String msg = InputQueue.getInstance().pull();
+                        if ((msg == null) || (msg.length() == 0)) {
+                            continue;
+                        }
+
+                        if ("delete".equals(msg)) {
+                            if (buf.length() > 0) {
+                                buf = new StringBuffer();
+                                Message message = clearBufferHandler.obtainMessage(1, "");
+                                clearBufferHandler.sendMessage(message);
+                            } else {
+                                inputConnection.deleteSurroundingText(1, 0);
+                            }
+
+                        } else {
+                            buf.append(msg);
+                            Message message = appendBufferHandler.obtainMessage(1, msg);
+                            appendBufferHandler.sendMessage(message);
+                        }
+
                     }
 
-                    InputConnection inputConnection = getCurrentInputConnection();
-                    inputConnection.commitText(msg, 1);
+                    if (buf.length() == 8) {
+                        try {
+                            char c = (char) Byte.parseByte(buf.toString(), 2);
+                            inputConnection.commitText(String.valueOf(c), 1);
+                            Message message = clearBufferHandler.obtainMessage(1, "");
+                            clearBufferHandler.sendMessage(message);
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+
                 }
             }
         }).start();
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-
-        if (v.getId() == R.id.button5) {
-            hideWindow();
-        } else {
-            Button button = (Button) v;
-            InputConnection inputConnection = getCurrentInputConnection();
-            inputConnection.commitText(button.getText(), 1);
+    private Handler appendBufferHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            textBuf.append(msg.obj.toString());
         }
+    };
 
-    }
+    private Handler clearBufferHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            textBuf.setText("");
+        }
+    };
+
 }
