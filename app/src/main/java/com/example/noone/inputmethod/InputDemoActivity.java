@@ -16,13 +16,13 @@ public class InputDemoActivity extends AppCompatActivity {
         int id = view.getId();
         switch (id) {
             case R.id.button_0:
-                InputQueue.getInstance().put("0");
+                InputQueue.getInstance().put(KeyCode.KEY_0);
                 break;
             case R.id.button_1:
-                InputQueue.getInstance().put("1");
+                InputQueue.getInstance().put(KeyCode.KEY_1);
                 break;
             case R.id.button_d:
-                InputQueue.getInstance().put("backspace");
+                InputQueue.getInstance().put(KeyCode.KEY_BACKSPACE);
                 break;
         }
     }
@@ -31,19 +31,19 @@ public class InputDemoActivity extends AppCompatActivity {
         int id = view.getId();
         switch (id) {
             case R.id.button_up:
-                InputQueue.getInstance().put("00");
+                InputQueue.getInstance().put(KeyCode.KEY_00);
                 break;
             case R.id.button_left:
-                InputQueue.getInstance().put("01");
+                InputQueue.getInstance().put(KeyCode.KEY_01);
                 break;
             case R.id.button_down:
-                InputQueue.getInstance().put("10");
+                InputQueue.getInstance().put(KeyCode.KEY_10);
                 break;
             case R.id.button_right:
-                InputQueue.getInstance().put("11");
+                InputQueue.getInstance().put(KeyCode.KEY_11);
                 break;
             case R.id.button_center:
-                InputQueue.getInstance().put("backspace");
+                InputQueue.getInstance().put(KeyCode.KEY_BACKSPACE);
                 break;
         }
     }
