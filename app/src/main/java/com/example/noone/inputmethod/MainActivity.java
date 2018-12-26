@@ -84,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (!bluetoothAdapter.isEnabled()) {
+
             //弹出对话框提示用户是后打开
-            Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enabler, 1);
-            //不做提示，强行打开，此方法需要权限<uses-permissionandroid:name="android.permission.BLUETOOTH_ADMIN" />;
-            // bluetoothAdapter.enable();
+          Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+          startActivityForResult(enabler, 1);
+            // 不做提示，强行打开，此方法需要权限<uses-permissionandroid:name="android.permission.BLUETOOTH_ADMIN" />;
+//            bluetoothAdapter.enable();
+            return;
         }
 
         if (mBleDevAdapter.isScanning) {
@@ -189,8 +191,10 @@ public class MainActivity extends AppCompatActivity {
             for (BluetoothGattService gattService : supportedGattServices) {
                 if (UARTSERVICE_SERVICE_UUID.equals(gattService.getUuid())) {
                     setNotify();
+                    return;
                 }
             }
+            Log.e(TAG, "未找到服务：" + UARTSERVICE_SERVICE_UUID);
         }
 
         @Override

@@ -1,15 +1,12 @@
 package com.example.noone.inputmethod;
 
+import android.content.Intent;
 import android.inputmethodservice.InputMethodService;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
-import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SimpleInputMethodService extends InputMethodService {
 
@@ -69,6 +66,11 @@ public class SimpleInputMethodService extends InputMethodService {
             }
         }).start();
         return view;
+    }
+
+    public void bluetoothClick(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private Handler appendBufferHandler = new Handler() {
