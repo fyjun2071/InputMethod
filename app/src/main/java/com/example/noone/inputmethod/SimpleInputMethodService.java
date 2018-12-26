@@ -33,7 +33,7 @@ public class SimpleInputMethodService extends InputMethodService {
                             continue;
                         }
 
-                        if ("backspace".equals(msg)) {
+                        if (KeyCode.KEY_BACKSPACE.equals(msg)) {
                             if (buf.length() > 0) {
                                 buf = new StringBuffer();
                                 Message message = clearBufferHandler.obtainMessage(1, "");
@@ -50,7 +50,12 @@ public class SimpleInputMethodService extends InputMethodService {
 
                     }
 
-                    if (buf.length() == 8) {
+                    if (buf.length() == 4) {
+                        // 4bit加个空格
+                        Message message = appendBufferHandler.obtainMessage(1, " ");
+                        appendBufferHandler.sendMessage(message);
+                    } else if (buf.length() == 8) {
+                        // 8bit生成一个字符
                         try {
                             char c = (char) Byte.parseByte(buf.toString(), 2);
                             inputConnection.commitText(String.valueOf(c), 1);
@@ -59,7 +64,6 @@ public class SimpleInputMethodService extends InputMethodService {
                         } catch (Exception e) {
 
                         }
-
                     }
 
                 }
