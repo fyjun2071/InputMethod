@@ -13,17 +13,33 @@
 
         <Button
             android:id="@+id/button_scan"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:onClick="reScan"
             android:text="扫描设备" />
 
         <Button
-            android:id="@+id/button_test"
-            android:layout_width="match_parent"
+            android:id="@+id/button_disconnect"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="1"
+            android:onClick="disconnect"
+            android:text="断开" />
+
+        <Button
+            android:id="@+id/button_draw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="draw"
+            android:text="画图" />
+
+        <Button
+            android:id="@+id/button_test"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="test"
             android:text="测试" />
 

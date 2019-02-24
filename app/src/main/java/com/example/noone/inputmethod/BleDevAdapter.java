@@ -104,13 +104,13 @@ public class BleDevAdapter extends RecyclerView.Adapter<BleDevAdapter.VH> {
             int pos = getAdapterPosition();
             Log.d(TAG, "onClick, getAdapterPosition=" + pos);
             if (pos >= 0 && pos < mDevices.size()) {
-                mListener.onItemClick(mDevices.get(pos).dev);
+                mListener.onItemClick(v, mDevices.get(pos).dev);
             }
         }
     }
 
     public interface Listener {
-        void onItemClick(BluetoothDevice dev);
+        void onItemClick(View v, BluetoothDevice dev);
     }
 
     public static class BleDev {

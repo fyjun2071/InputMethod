@@ -17,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothGatt mBluetoothGatt;
     private boolean isConnected = false;
 
+    private ImageView connectStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView rv = findViewById(R.id.list_devices);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mBleDevAdapter = new BleDevAdapter(new BleDevAdapter.Listener() {
             @Override
-            public void onItemClick(BluetoothDevice dev) {
+            public void onItemClick(View v, BluetoothDevice dev) {
                 closeConn();
-                mBluetoothGatt = dev.connectGatt(MainActivity.this, false, mBluetoothGattCallback); // 连接蓝牙设备
+                // 连接蓝牙设备
+                mBluetoothGatt = dev.connectGatt(MainActivity.this, false, mBluetoothGattCallback);
                 Log.v(TAG, String.format("与[%s]开始连接............", dev));
+                connectStatus = v.findViewById(R.id.connect_status);
             }
         });
         rv.setAdapter(mBleDevAdapter);
@@ -73,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
     // BLE中心设备连接外围设备的数量有限(大概2~7个)，在建立新连接之前必须释放旧连接资源，否则容易出现连接错误133
     private void closeConn() {
         if (mBluetoothGatt != null) {
+            isConnected = false;
             mBluetoothGatt.disconnect();
-            mBluetoothGatt.close();
+//            mBluetoothGatt.close();
         }
     }
 
@@ -169,11 +175,17 @@ public class MainActivity extends AppCompatActivity {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             BluetoothDevice dev = gatt.getDevice();
             Log.i(TAG, String.format("onConnectionStateChange:%s,%s,%s,%s", dev.getName(), dev.getAddress(), status, newState));
-            if (status == BluetoothGatt.GATT_SUCCESS && newState == BluetoothProfile.STATE_CONNECTED) {
-                isConnected = true;
-                gatt.discoverServices(); //启动服务发现
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    connected();
+
+                    // 启动服务发现
+                    gatt.discoverServices();
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                    disconnected();
+                }
+
             } else {
-                isConnected = false;
                 closeConn();
             }
 
@@ -194,7 +206,9 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
             }
+            Toast.makeText(MainActivity.this,"未发现URAT服务", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "未找到服务：" + UARTSERVICE_SERVICE_UUID);
+            closeConn();
         }
 
         @Override
@@ -237,6 +251,40 @@ public class MainActivity extends AppCompatActivity {
     public void test(View view) {
         Intent intent = new Intent(this, InputDemoActivity.class);
         startActivity(intent);
+    }
+
+    public void draw(View view) {
+        closeConn();
+        Intent intent = new Intent(this, TouchDrawActivity.class);
+        startActivity(intent);
+    }
+
+    public void disconnect(View view) {
+        closeConn();
+    }
+
+    private void connected() {
+        isConnected = true;
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this,"连接成功", Toast.LENGTH_SHORT).show();
+                connectStatus.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void disconnected() {
+        isConnected = false;
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this,"连接断开", Toast.LENGTH_SHORT).show();
+                connectStatus.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
 }

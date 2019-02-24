@@ -36,6 +36,7 @@
         </service>
 
         <activity android:name=".InputDemoActivity"></activity>
+        <activity android:name=".TouchDrawActivity" />
     </application>
 
 </manifest>
